@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sw_course", "sw_course\sw_c
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MavLink", "MavLink\MavLink.csproj", "{5B9CEFE8-82CD-4C20-BA1D-A4325F59D933}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sw_course_test", "sw_course_test\sw_course_test.csproj", "{D29AF1B8-59F0-4873-90F0-34D738E59011}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{5B9CEFE8-82CD-4C20-BA1D-A4325F59D933}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5B9CEFE8-82CD-4C20-BA1D-A4325F59D933}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5B9CEFE8-82CD-4C20-BA1D-A4325F59D933}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D29AF1B8-59F0-4873-90F0-34D738E59011}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D29AF1B8-59F0-4873-90F0-34D738E59011}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D29AF1B8-59F0-4873-90F0-34D738E59011}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D29AF1B8-59F0-4873-90F0-34D738E59011}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
