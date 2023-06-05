@@ -1,8 +1,8 @@
 ﻿namespace sw_course;
 
 public static class Utils
-{    
-    public static readonly int StxLenght = 1;
+{
+    private static readonly int StxLenght = 1;
     public static BinaryReader GetStreamMessage(byte[] message)
     {
         var stream = new MemoryStream(MAVLink.MAVLINK_MAX_PACKET_LEN);
@@ -50,7 +50,7 @@ public static class Utils
             }    
         }
 
-        var sigSize = (message.sig != null) ? MAVLink.MAVLINK_SIGNATURE_BLOCK_LEN : 0;
+        var sigSize = message.sig is {Length: > 0} ? MAVLink.MAVLINK_SIGNATURE_BLOCK_LEN : 0;
         ushort crc = MAVLink.MavlinkCRC.crc_calculate(buffer, message.Length - sigSize - MAVLink.MAVLINK_NUM_CHECKSUM_BYTES);
         crc = MAVLink.MavlinkCRC.crc_accumulate(msgInfo.crc, crc);
 
@@ -58,7 +58,7 @@ public static class Utils
                (message.crc16 & 0xff) != (crc & 0xff);
     }
 
-    public static byte[] GenerateMav2Packet(MAVLink.MAVLINK_MSG_ID msgId, int sysId, int compId, object rawData, bool signing = false)
+    private static byte[] GenerateMav2Packet(MAVLink.MAVLINK_MSG_ID msgId, int sysId, int compId, object rawData, bool signing = false)
     {
         byte[] data = MavlinkUtil.StructureToByteArray(rawData);
         int lenghtPacket = signing
@@ -89,12 +89,12 @@ public static class Utils
         checksum = MAVLink.MavlinkCRC.crc_accumulate(MAVLink.MAVLINK_MESSAGE_INFOS.GetMessageInfo((uint)msgId).crc,
             checksum);
 
-        byte ck_a = (byte)(checksum & 0xFF); //< High byte
-        byte ck_b = (byte)(checksum >> 8); //< Low byte
+        var ckA = (byte)(checksum & 0xFF); //< High byte
+        var ckB = (byte)(checksum >> 8); //< Low byte
 
-        packet[i] = ck_a;
+        packet[i] = ckA;
         i++;
-        packet[i] = ck_b;
+        packet[i] = ckB;
 
         return packet;
     }
