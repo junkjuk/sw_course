@@ -178,11 +178,11 @@ public class CurrentMessage
                 break;
             case (uint) MAVLink.MAVLINK_MSG_ID.SYS_STATUS:
             {
-                var sysstatus = message.ToStructureGC<MAVLink.mavlink_sys_status_t>();
+                var sysStatus = message.ToStructureGC<MAVLink.mavlink_sys_status_t>();
                 
-                var batteryVoltage = sysstatus.voltage_battery / 1000.0f;
-                var batteryRemaining = sysstatus.battery_remaining;
-                var current = sysstatus.current_battery / 100.0f;
+                var batteryVoltage = sysStatus.voltage_battery / 1000.0f;
+                var batteryRemaining = sysStatus.battery_remaining;
+                var current = sysStatus.current_battery / 100.0f;
                 
                 if (batteryRemaining != BatteryRemaining ||
                     current != Current ||
@@ -198,21 +198,21 @@ public class CurrentMessage
             case (uint) MAVLink.MAVLINK_MSG_ID.HEARTBEAT:
             {
                 var hb = message.ToStructureGC<MAVLink.mavlink_heartbeat_t>();
-                var ApName = (MAVLink.MAV_AUTOPILOT) hb.autopilot;
-                var ApType = (MAVLink.MAV_TYPE) hb.type;
-                var custom_mode = hb.custom_mode;
+                var apName = (MAVLink.MAV_AUTOPILOT) hb.autopilot;
+                var apType = (MAVLink.MAV_TYPE) hb.type;
+                var customMode = hb.custom_mode;
 
-                if (ApName == _apName &&
-                    ApType == _apType &&
-                    custom_mode == _custom_mode)
+                if (apName == _apName &&
+                    apType == _apType &&
+                    customMode == _custom_mode)
                 {
                     _isDifferent = true;
                     return;
                 }                
-                 switch (ApName)
+                switch (apName)
                 {
                     case MAVLink.MAV_AUTOPILOT.ARDUPILOTMEGA:
-                        switch (ApType)
+                        switch (apType)
                         {
                             case MAVLink.MAV_TYPE.FIXED_WING:
                                 DroneFirmware = DroneFirmware.Plane;
@@ -245,15 +245,13 @@ public class CurrentMessage
 
                         break;
                     case MAVLink.MAV_AUTOPILOT.UDB:
-                        switch (ApType)
+                        switch (apType)
                         {
                             case MAVLink.MAV_TYPE.FIXED_WING:
                                 DroneFirmware = DroneFirmware.Plane;
                                 break;
                         }
 
-                        break;
-                    default:
                         break;
                 }
                 if (hb.type == (byte)MAVLink.MAV_TYPE.GCS)
@@ -268,13 +266,10 @@ public class CurrentMessage
                         return;
 
                     _custom_mode = hb.custom_mode;
-                    foreach (var pair in modesList)
+                    foreach (var pair in modesList.Where(pair => pair.Key == hb.custom_mode))
                     {
-                        if (pair.Key == hb.custom_mode)
-                        {
-                            Mode = pair.Value;
-                            break;
-                        }
+                        Mode = pair.Value;
+                        break;
                     }
                 }
             }
