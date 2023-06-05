@@ -18,6 +18,20 @@ public static class Utils
         return message;
     }
     
+    public static byte[] GetGlobalPosMessage()
+    {
+        var structure = new MAVLink.mavlink_global_position_int_t(1, 1, 1, 1, 0, 1, 1, 1, 1);
+        var message = GenerateMav2Packet(MAVLink.MAVLINK_MSG_ID.GLOBAL_POSITION_INT, 1, 1, structure);
+        return message;
+    }
+
+    public static byte[] GetGps2RowMessage()
+    {
+        var structure = new MAVLink.mavlink_gps2_raw_t(1, 2, 3, 1, 0, 1, 1, 1, 1,1,1,1,1,1,1,1,1,1);
+        var message = GenerateMav2Packet(MAVLink.MAVLINK_MSG_ID.GPS2_RAW, 1, 1, structure);
+        return message;
+    }
+    
     public static byte[] GetEmptyMessage()
         => new byte[280];
 
