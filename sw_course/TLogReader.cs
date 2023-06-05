@@ -21,7 +21,7 @@ public class TLogReader
 
                 var dateArray = new byte[8];
                 var localPacketTime = DateTime.MinValue;
-                playbackFile.Read(dateArray, 0, dateArray.Length);
+                _ = playbackFile.Read(dateArray, 0, dateArray.Length);
                 Array.Reverse(dateArray);
                 
                 var packetTime = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
@@ -59,7 +59,7 @@ public class TLogReader
 
                 var buffer = new byte[length];
                 Array.Copy(tempBuffer, buffer, 3);
-                playbackFile.Read(buffer, 3, length - 3);
+                _ = playbackFile.Read(buffer, 3, length - 3);
                 
                 _lastLogTime = localPacketTime;
                 
