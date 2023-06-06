@@ -22,3 +22,4 @@ var end = DateTime.Now - start;
 
 Console.WriteLine("Success!");
 Console.WriteLine($"Time elapsed: {end.TotalSeconds} seconds");
+
