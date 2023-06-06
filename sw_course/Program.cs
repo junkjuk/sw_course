@@ -1,13 +1,24 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using sw_course;
 
-using sw_course;
+if(args.Length < 2)
+    throw new ArgumentException("No input and output files specified");
 
-var outFileName = "test.csv";
+var inputFileName = args[0];
+var outputFileName = args[1];
 
-using var reader = new ReaderFromFile(Path.Combine(Directory.GetCurrentDirectory(), "testLog.tlog"));
+if (!File.Exists(inputFileName))
+    throw new FileNotFoundException("Input file not found");
 
-using var fs = new StreamWriter(outFileName);
+var start = DateTime.Now;
+
+using var reader = new ReaderFromFile(Path.Combine(Directory.GetCurrentDirectory(), inputFileName));
+
+using var fs = new StreamWriter(outputFileName);
 foreach (var messageLine in reader.GetMessagesInCsvFormat())
-{
     fs.WriteLine(messageLine);
-}
+
+
+var end = DateTime.Now - start;
+
+Console.WriteLine("Success!");
+Console.WriteLine($"Time elapsed: {end.TotalSeconds} seconds");
