@@ -1,6 +1,6 @@
 ﻿using sw_course;
 
-if(args.Length < 2)
+if (args.Length < 2)
     throw new ArgumentException("No input and output files specified");
 
 var inputFileName = args[0];
@@ -22,4 +22,3 @@ var end = DateTime.Now - start;
 
 Console.WriteLine("Success!");
 Console.WriteLine($"Time elapsed: {end.TotalSeconds} seconds");
-

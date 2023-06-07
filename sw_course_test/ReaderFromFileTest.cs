@@ -12,9 +12,9 @@ public class ReaderFromFileTest
     {
         var file = Path.Combine(Directory.GetCurrentDirectory(), "testLogEmpty.tlog");
         using var reader = new ReaderFromFile(file);
-        Assert.AreEqual( reader.GetMessagesInCsvFormat().Count(), 1);
+        Assert.AreEqual(reader.GetMessagesInCsvFormat().Count(), 1);
     }
-    
+
     [Test]
     public void Test2()
     {
@@ -22,10 +22,10 @@ public class ReaderFromFileTest
         using var reader = new ReaderFromFile(file);
         Assert.AreEqual(reader.GetMessagesInCsvFormat().Count(), 698);
     }
-    
+
     [Test]
     public void Test3()
     {
-        Assert.Throws<FileNotFoundException>((() => _ = new ReaderFromFile("blablabla")));
+        Assert.Throws<FileNotFoundException>(() => _ = new ReaderFromFile("blablabla"));
     }
 }
