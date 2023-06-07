@@ -17,69 +17,44 @@ public class Heartbeat : MavMessage
         {
             _isDifferent = true;
             return;
-        }                
-        switch (apName)
-        {
-            case MAVLink.MAV_AUTOPILOT.ARDUPILOTMEGA:
-                switch (apType)
-                {
-                    case MAVLink.MAV_TYPE.FIXED_WING:
-                        DroneFirmware = DroneFirmware.Plane;
-                        break;
-                    case MAVLink.MAV_TYPE n when (n >= MAVLink.MAV_TYPE.VTOL_TAILSITTER_DUOROTOR && n <= MAVLink.MAV_TYPE.VTOL_RESERVED5):
-                        DroneFirmware = DroneFirmware.Plane;
-                        break;
-                    case MAVLink.MAV_TYPE.FLAPPING_WING:
-                        DroneFirmware = DroneFirmware.Plane;
-                        break;
-                    case MAVLink.MAV_TYPE.QUADROTOR:
-                        DroneFirmware = DroneFirmware.Copter;
-                        break;
-                    case MAVLink.MAV_TYPE.TRICOPTER:
-                        DroneFirmware = DroneFirmware.Copter;
-                        break;
-                    case MAVLink.MAV_TYPE.HEXAROTOR:
-                        DroneFirmware = DroneFirmware.Copter;
-                        break;
-                    case MAVLink.MAV_TYPE.OCTOROTOR:
-                        DroneFirmware = DroneFirmware.Copter;
-                        break;
-                    case MAVLink.MAV_TYPE.HELICOPTER:
-                        DroneFirmware = DroneFirmware.Copter;
-                        break;
-                    case MAVLink.MAV_TYPE.DODECAROTOR:
-                        DroneFirmware = DroneFirmware.Copter;
-                        break;
-                }
-
-                break;
-            case MAVLink.MAV_AUTOPILOT.UDB:
-                switch (apType)
-                {
-                    case MAVLink.MAV_TYPE.FIXED_WING:
-                        DroneFirmware = DroneFirmware.Plane;
-                        break;
-                }
-
-                break;
         }
-        if (hb.type == (byte)MAVLink.MAV_TYPE.GCS)
-        {
-            // skip gcs hb's
-            // only happens on log playback - and shouldnt get them here
-        }
-        else
-        {
-            var modesList = MavCommon.GetModesList(DroneFirmware);
-            if (modesList == null)
-                return;
 
-            _custom_mode = hb.custom_mode;
-            foreach (var pair in modesList.Where(pair => pair.Key == hb.custom_mode))
-            {
-                Mode = pair.Value;
-                break;
-            }
+        DroneFirmware = GetDroneFirmware(apName, apType);
+
+        if (hb.type == (byte) MAVLink.MAV_TYPE.GCS)
+            return;
+
+        var modesList = MavCommon.GetModesList(DroneFirmware);
+        if (modesList == null)
+            return;
+
+        _custom_mode = hb.custom_mode;
+        foreach (var pair in modesList.Where(pair => pair.Key == hb.custom_mode))
+        {
+            Mode = pair.Value;
+            break;
         }
     }
+
+    private static DroneFirmware GetDroneFirmware(MAVLink.MAV_AUTOPILOT apName, MAVLink.MAV_TYPE apType)
+        => apName switch
+            {
+                MAVLink.MAV_AUTOPILOT.ARDUPILOTMEGA => apType switch
+                {
+                    MAVLink.MAV_TYPE.FIXED_WING
+                        or MAVLink.MAV_TYPE.FLAPPING_WING
+                        or >= MAVLink.MAV_TYPE.VTOL_TAILSITTER_DUOROTOR and <= MAVLink.MAV_TYPE.VTOL_RESERVED5
+                        => DroneFirmware.Plane,
+                    MAVLink.MAV_TYPE.QUADROTOR
+                        or MAVLink.MAV_TYPE.TRICOPTER
+                        or MAVLink.MAV_TYPE.HEXAROTOR
+                        or MAVLink.MAV_TYPE.OCTOROTOR
+                        or MAVLink.MAV_TYPE.HELICOPTER
+                        or MAVLink.MAV_TYPE.DODECAROTOR
+                        => DroneFirmware.Copter,
+                    _ => DroneFirmware.Copter
+                },
+                MAVLink.MAV_AUTOPILOT.UDB when apType == MAVLink.MAV_TYPE.FIXED_WING => DroneFirmware.Plane,
+                _ => DroneFirmware.Copter
+            };
 }
