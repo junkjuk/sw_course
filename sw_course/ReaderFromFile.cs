@@ -25,16 +25,16 @@ public class ReaderFromFile : IDisposable
         var currentStr = "";
         foreach (var element in messages)
         {
-            var ms = new CurrentMessage(element);
+            var ms = CurrentMessage.GetMessage(element);
 
-            if (CurrentMessage.Time.Second != currentDate.Second)
+            if (ms.GetTime.Second != currentDate.Second)
             {
-                currentDate = CurrentMessage.Time;
+                currentDate = ms.GetTime;
                 if (!string.IsNullOrEmpty(currentStr))
                     yield return currentStr;
             }
 
-            currentStr = ms.BuildCsvString() != string.Empty ? ms.BuildCsvString() : currentStr;
+            currentStr = ms.GetCsv() != string.Empty? ms.GetCsv(): currentStr;
         }
     }
 
