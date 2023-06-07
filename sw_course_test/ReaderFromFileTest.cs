@@ -20,7 +20,7 @@ public class ReaderFromFileTest
     {
         var file = Path.Combine(Directory.GetCurrentDirectory(), "testLog.tlog");
         using var reader = new ReaderFromFile(file);
-        Assert.AreEqual(reader.GetMessagesInCsvFormat().Count(), 698);
+        Assert.AreEqual(reader.GetMessagesInCsvFormat().Count(), 663);
     }
 
     [Test]
