@@ -1,12 +1,24 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using sw_course;
 
-using sw_course;
-var reader = new TLogReader();
+if (args.Length < 2)
+    throw new ArgumentException("No input and output files specified");
 
-Console.WriteLine("Hello, World!");
-var a = Utils.GetHeartbeatMessage()
-    .Concat(Utils.GetHeartbeatMessage().Concat(Utils.GetHeartbeatMessage())).ToArray();
-var stream = Utils.GetStreamMessage(a);
-var messages = reader.ReadFromLogFile(stream);
+var inputFileName = args[0];
+var outputFileName = args[1];
 
-Console.WriteLine(messages.Count());
+if (!File.Exists(inputFileName))
+    throw new FileNotFoundException("Input file not found");
+
+var start = DateTime.Now;
+
+using var reader = new ReaderFromFile(Path.Combine(Directory.GetCurrentDirectory(), inputFileName));
+
+using var fs = new StreamWriter(outputFileName);
+foreach (var messageLine in reader.GetMessagesInCsvFormat())
+    fs.WriteLine(messageLine);
+
+
+var end = DateTime.Now - start;
+
+Console.WriteLine("Success!");
+Console.WriteLine($"Time elapsed: {end.TotalSeconds} seconds");
