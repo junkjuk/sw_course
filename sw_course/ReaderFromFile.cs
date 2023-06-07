@@ -26,6 +26,8 @@ public class ReaderFromFile : IDisposable
         foreach (var element in messages)
         {
             var ms = CurrentMessage.GetMessage(element);
+            if (ms is null)
+                continue;
 
             if (ms.GetTime.Second != currentDate.Second)
             {

@@ -7,7 +7,7 @@ namespace sw_course;
 
 public static class CurrentMessage
 {
-    public static MavMessage GetMessage(MAVLink.MAVLinkMessage message)
+    public static MavMessage? GetMessage(MAVLink.MAVLinkMessage message)
     {
         return message.msgid switch 
         {
@@ -19,7 +19,7 @@ public static class CurrentMessage
             (uint) MAVLink.MAVLINK_MSG_ID.BATTERY_STATUS => new BatteryStatusCreator().CreateMessage(message),
             (uint) MAVLink.MAVLINK_MSG_ID.SYS_STATUS => new SysStatusCreator().CreateMessage(message),
             (uint) MAVLink.MAVLINK_MSG_ID.HEARTBEAT => new HeartbeatCreator().CreateMessage(message),
-            _ => throw new ArgumentOutOfRangeException()
+            _ => null
         };
     }
 }
