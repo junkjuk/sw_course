@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using NUnit.Framework;
 using sw_course;
+using sw_course.MavMessages;
 
 namespace sw_course_test;
 
@@ -27,10 +28,10 @@ public class CurrentMessageTest
         var messages = _tLogReader.ReadFromLogFile(stream);
         foreach (var message in messages)
         {
-            var packet = new CurrentMessage(message);
+            var packet = CurrentMessage.GetMessage(message);
         }
 
-        Assert.AreEqual(CurrentMessage.Latitude, 0);
+        Assert.AreEqual(MavMessage.Latitude, 0);
     }
 
     [Test]
@@ -40,10 +41,10 @@ public class CurrentMessageTest
         var messages = _tLogReader.ReadFromLogFile(stream);
         foreach (var message in messages)
         {
-            var packet = new CurrentMessage(message);
+            var packet = CurrentMessage.GetMessage(message);
         }
         
-        Assert.True(CurrentMessage.Latitude - 1 < 0.1);
+        Assert.True(MavMessage.Latitude - 1 < 0.1);
     }
     
     [Test]
@@ -53,8 +54,8 @@ public class CurrentMessageTest
         var messages = _tLogReader.ReadFromLogFile(stream);
         foreach (var message in messages)
         {
-            var packet = new CurrentMessage(message);
+            var packet = CurrentMessage.GetMessage(message);
         }
-        Assert.True(CurrentMessage.Latitude - 2 < 0.1);
+        Assert.True(MavMessage.Latitude - 2 < 0.1);
     }
 }
